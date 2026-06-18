@@ -709,3 +709,12 @@ textarea::placeholder {
     opacity: 0.6;
     cursor: not-allowed;
 }
+.input-error {
+    animation: fadeOut 5s forwards;
+}
+
+@keyframes fadeOut {
+    0%   { opacity: 1; }
+    70%  { opacity: 1; }
+    100% { opacity: 0; }
+}
