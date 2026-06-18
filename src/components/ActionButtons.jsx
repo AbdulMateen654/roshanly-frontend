@@ -15,15 +15,19 @@ function ActionButtons({
     quizError,
     setQuizError
 }) {
+    const setErrorWithFade = (setter, message) => {
+    setter(message);
+    setTimeout(() => setter(""), 5000);
+};
     const handleSummarize = async () => {
     setInputError("");
 
     if (!text.trim()) {
-        setInputError("Please paste your study material first.");
+        setErrorWithFade(setInputError, "Please paste your study material first.");
         return;
     }
     if (text.trim().length < 50) {
-        setInputError("Text is too short. Please paste meaningful study material.");
+        setErrorWithFade(setInputError, "Text is too short. Please paste meaningful study material.");
         return;
     }
 
@@ -57,11 +61,12 @@ function ActionButtons({
         setQuizError("");
 
         if (!selectedSession) {
-            setQuizError("Please select or create a session first.");
+            setErrorWithFade(setQuizError, "Please select or create a session first.");
             return;
         }
         if (!selectedSession.summary || selectedSession.summary.length === 0) {
-            setQuizError("Please generate a summary before creating a quiz.");
+           setErrorWithFade(setQuizError, "Please generate a summary before creating a quiz.");
+
             return;
         }
 
@@ -81,7 +86,7 @@ function ActionButtons({
 
         } catch (err) {
             console.error(err);
-            setQuizError("Something went wrong. Please try again.");
+            setErrorWithFade(setQuizError, "Something went wrong. Please try again.");
             setQuizLoading(false);
         }
     };
