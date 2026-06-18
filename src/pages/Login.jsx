@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
-import { validateEmail, validatePassword } from "../utils/validation";
+import { validateEmail } from "../utils/validation";
 
 
 function Login() {
@@ -15,33 +15,26 @@ function Login() {
 
     const navigate = useNavigate();
 
-    const handleLogin = async () => {
+const handleLogin = async () => {
+    const emailError = validateEmail(email);
+    setErrors({ email: emailError, password: "" });
+    if (emailError) return;
 
-        const emailError = validateEmail(email);
-        const passwordError = validatePassword(password);
-
-        setErrors({ email: emailError, password: passwordError });
-
-        if (emailError || passwordError) return;
-
-        try {
-            const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}/api/auth/login`,
-                { email, password }
-            );
-
-            setServerError("");
-            setMessage(response.data.message);
-            localStorage.setItem("token", response.data.token);
-            localStorage.setItem("user", JSON.stringify(response.data.user));
-
-            setTimeout(() => navigate("/dashboard"), 1000);
-
-        } catch (err) {
-            setMessage("");
-            setServerError(err.response?.data?.message || "Login failed");
-        }
-    };
+    try {
+        const response = await axios.post(
+            `${import.meta.env.VITE_API_URL}/api/auth/login`,
+            { email, password }
+        );
+        setServerError("");
+        setMessage(response.data.message);
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        setTimeout(() => navigate("/dashboard"), 1000);
+    } catch (err) {
+        setMessage("");
+        setServerError(err.response?.data?.message || "Login failed");
+    }
+};
 
     return (
         <div className="auth-page">
