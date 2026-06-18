@@ -19,7 +19,7 @@ function ActionButtons({
     setter(message);
     setTimeout(() => setter(""), 5000);
 };
-    const handleSummarize = async () => {
+const handleSummarize = async () => {
     setInputError("");
 
     if (!text.trim()) {
@@ -34,10 +34,11 @@ function ActionButtons({
     try {
         setLoading(true);
 
-        // ✅ Reuse existing session, or create one only if none is selected
-        const activeSession = (!selectedSession || selectedSession.summary?.length > 0)
-    ? await createNewSession()
-    : selectedSession;
+        // Reuse session if exists AND (no summary yet OR last summary was invalid input)
+        const isInvalidSession = selectedSession?.aiTitle === "Invalid Input";
+        const activeSession = (!selectedSession || (selectedSession.summary?.length > 0 && !isInvalidSession))
+            ? await createNewSession()
+            : selectedSession;
 
         const res = await axios.post(
             `${import.meta.env.VITE_API_URL}/api/sessions/summarize/${activeSession._id}`,
@@ -56,7 +57,6 @@ function ActionButtons({
         setLoading(false);
     }
 };
-
     const handleQuiz = async () => {
         setQuizError("");
 
