@@ -87,13 +87,12 @@ function Dashboard() {
         }
     };
 
-    const cleanText = (raw) => {
-        return raw
-            .replace(/[•·▪▸◦‣⁃]/g, "")
-            .replace(/[ \t]+/g, " ")
-            .replace(/\n{2,}/g, "\n")
-            .trim();
-    };
+const cleanText = (raw) => {
+    return raw
+        .replace(/[•·▪▸◦‣⁃]/g, "")
+        .replace(/[ \t]+/g, " ")
+        .trim();
+};
 
     return (
         <div className={`dashboard ${darkMode ? "dark" : ""}`}>
